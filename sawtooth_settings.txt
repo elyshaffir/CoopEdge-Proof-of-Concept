@@ -1,0 +1,118 @@
+server b: 03dce7069786b96a54ca9920093db2afe5b1cfd97dd55ff657064ea90f635267bc
+server c: 039000a07ee2bbd18ac69e70ad9bc673a6fe7a292fda7642a1fd3ffa0488044890
+server d: 02b6a85f2ca41c76d516968446cc6c775d762a22c9993e7da0a3279385657ec0af
+server a: 02a91f8aeb169181bcc0ae30f386b7a344a7147b7850e85083cc0e00c265b91659
+
+sawset genesis --key $HOME/.sawtooth/keys/server_a.priv \
+-o config-genesis.batch
+
+sawset proposal create --key $HOME/.sawtooth/keys/server_a.priv \
+-o config-consensus.batch \
+sawtooth.consensus.algorithm.name=pbft \
+sawtooth.consensus.algorithm.version=1.0 \
+sawtooth.consensus.pbft.members='["02a91f8aeb169181bcc0ae30f386b7a344a7147b7850e85083cc0e00c265b91659","03dce7069786b96a54ca9920093db2afe5b1cfd97dd55ff657064ea90f635267bc","039000a07ee2bbd18ac69e70ad9bc673a6fe7a292fda7642a1fd3ffa0488044890","02b6a85f2ca41c76d516968446cc6c775d762a22c9993e7da0a3279385657ec0af"]'
+
+
+sawset proposal create --key $HOME/.sawtooth/keys/vy.priv \
+-o pbft-settings.batch \
+sawtooth.consensus.pbft.forced_view_change_interval=1000
+
+sudo -u sawtooth sawadm genesis \
+config-genesis.batch config-consensus.batch pbft-settings.batch
+
+1.
+sudo -u sawtooth sawtooth-validator \
+--bind component:https://protect-au.mimecast.com/s/tKRbCANpqptEZGNGs9jPKg \
+--bind network:https://protect-au.mimecast.com/s/sUxICBNqoqt8Dz7zFj8NqA \
+--bind consensus:https://protect-au.mimecast.com/s/vhNBCD1vNvT3oD5DFl2w8O \
+--endpoint https://protect-au.mimecast.com/s/sUxICBNqoqt8Dz7zFj8NqA \
+--peers tcp://136.186.108.206:8800,tcp://136.186.108.225:8800,tcp://136.186.108.146:8800
+
+2.
+sudo -u sawtooth sawtooth-rest-api -v
+
+3.
+sudo -u sawtooth settings-tp -v
+
+optional:
+sudo -u sawtooth intkey-tp-python -v
+sudo -u sawtooth xo-tp-python -v
+sudo -u sawtooth job-tp-python -v
+
+4.
+sudo -u sawtooth pbft-engine -vv --connect https://protect-au.mimecast.com/s/vhNBCD1vNvT3oD5DFl2w8O
+
+sudo kill -9 `sudo lsof -t -i:4004`
+
+
+sudo docker run -d -p 8086:8086 -v /var/lib/influx-data:/var/lib/influx-data \
+ -e INFLUXDB_DB=metrics -e INFLUXDB_HTTP_AUTH_ENABLED=true \
+ -e INFLUXDB_ADMIN_USER=admin -e INFLUXDB_ADMIN_PASSWORD='admin' \
+ -e INFLUXDB_USER=user -e INFLUXDB_USER_PASSWORD='user' \
+ --name sawtooth-stats-influxdb influxdb
+
+
+sudo apt install python3-setuptools
+
++build service:
+sudo python3 setup.py bdist_egg
+sudo python3 setup.py install 
+
+# check path
+which job-tp-python
+
+sudo systemctl enable sawtooth-job-tp-python.service
+sudo systemctl start sawtooth-job-tp-python.service
+sudo systemctl status sawtooth-job-tp-python.service
+
++build validator service:
+sudo python setup.py bdist_wheel
+sudo python setup.py install 
+
+sudo systemctl enable sawtooth-validator.service
+
+
+
+cargo build: generate folder target. 
+'sawtooth-validator', 'libsawtooth_validator.so' are in target
+copy sawtooth-validator to bin under validator folder
+copy libsawtooth_validator.so to lib under validator folder
+
+
+
+source $HOME/.cargo/env
+
+
+sudo apt-get install libzmq3-dev
+
+
+
+sudo cp ~/prototype/sawtooth-poer/packaging/systemd/sawtooth-pbft-engine.service /lib/systemd/system
+
+sudo cp ~/prototype/sawtooth-poer/packaging/systemd/sawtooth-pbft-engine /etc/default
+
+sudo cp ~/prototype/sawtooth-poer/target/debug/pbft-engine /usr/bin
+###
+sudo cp ~/prototype/sawtooth-pbft/target/debug/pbft-engine /usr/bin
+
+##
+sudo cp /home/ubuntu/Downloads/sawtooth-pbft-master/target/debug/pbft-engine /usr/bin
+
+
+
+Extra Part to install from Vy
+
+PROTOC_ZIP=protoc-3.14.0-linux-x86_64.zip
+curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0/$PROTOC_ZIP
+sudo unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
+sudo unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
+rm -f $PROTOC_ZIP
+
+PROTOC_ZIP=protoc-3.14.0-linux-x86_64.zip
+curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0/$PROTOC_ZIP
+sudo unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
+sudo unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
+rm -f $PROTOC_ZIP
+
+sudo apt-get install protobuf-compiler
+sudo apt-get remove protobuf-compiler
