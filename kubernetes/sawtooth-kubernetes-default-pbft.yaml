@@ -43,7 +43,7 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
 
             - name: sawtooth-pbft-engine
-              image: hyperledger/sawtooth-pbft-engine:nightly
+              image: poer_engine:v1
               command:
                 - bash
               args:
@@ -205,7 +205,7 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
 
             - name: sawtooth-pbft-engine
-              image: hyperledger/sawtooth-pbft-engine:nightly
+              image: poer_engine:v1
               command:
                 - bash
               args:
@@ -357,7 +357,7 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
 
             - name: sawtooth-pbft-engine
-              image: hyperledger/sawtooth-pbft-engine:nightly
+              image: poer_engine:v1
               command:
                 - bash
               args:
@@ -510,7 +510,7 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
 
             - name: sawtooth-pbft-engine
-              image: hyperledger/sawtooth-pbft-engine:nightly
+              image: poer_engine:v1
               command:
                 - bash
               args:
@@ -664,7 +664,7 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
 
             - name: sawtooth-pbft-engine
-              image: hyperledger/sawtooth-pbft-engine:nightly
+              image: poer_engine:v1
               command:
                 - bash
               args:

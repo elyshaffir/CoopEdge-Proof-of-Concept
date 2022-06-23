@@ -26,5 +26,7 @@ RUN echo "deb [arch=amd64] http://repo.sawtooth.me/ubuntu/nightly bionic univers
    &&  apt-get install -y -q sawtooth-pbft-engine \
    &&  apt-get clean \
    &&  rm -rf /var/lib/apt/lists/*
-# CMD ["pbft-engine" "-C" "tcp://validator:5050"]
-CMD ["/bin/bash"]
+COPY packaging/systemd/sawtooth-pbft-engine.service /lib/systemd/system
+COPY packaging/systemd/sawtooth-pbft-engine /etc/default
+COPY target/debug/pbft-engine /usr/bin
+CMD ["pbft-engine" "-C" "tcp://validator:5050"]

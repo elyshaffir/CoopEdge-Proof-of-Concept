@@ -87,10 +87,7 @@ impl PoERNode {
                         error!("Failed to broadcast bootstrap commit due to error: {}", err)
                     });
             }
-            let contents = PoERNode::read_chain();
-            let leader = PoERNode::choose_leader(contents);
-            // info!("=====pbft_state: primary========={:#?}", leader);
-            state.set_primary_id(leader);
+            PoERNode::choose_hard_coded_leader(state);
         }
         
         // Primary initializes a block
@@ -100,6 +97,14 @@ impl PoERNode {
             });
         }
         n
+    }
+
+    pub fn choose_hard_coded_leader(state: &mut PbftState) -> () {
+        // let contents = PoERNode::read_chain();
+        warn!("USING HARD CODED LEADER.");
+        let leader = hex::decode("028315b850eaadb933774fb5875b276a51fad488165e930d9da80c43f8dfb48f11").unwrap(); // PoERNode::choose_leader(contents); // TODO hard coded leader
+        // info!("=====pbft_state: primary========={:#?}", leader);
+        state.set_primary_id(leader);
     }
 
     pub fn read_chain() -> String{
@@ -137,17 +142,13 @@ impl PoERNode {
             }
         }
         info!("===========leader==============={:#?}", leader);
-        
 
         let ms: BTreeMap<&str, &str> = [
-            ("server_a", "0287ffe5552884f8b008aef66d8949d572b8e910aa5de40772966e0b772ba12d23"),
-            ("server_b", "02dd7a72f26fc393421c7cff0e6425218b2af5dbc77d854b2b84973e399951917b"),
-            ("server_c", "034a095267bc5821ef6b73662b5a744f20e92273f852f5d9b8600d132b325ba216"),
-            ("server_d", "03aba4d68e88e4fccfecca8eeeefa023a45c583989e611e76a02908ec67dfd359d")
-            // ("server_e", "02ee60e406ff234a707cffe5c1c13547fd3e032a16bb26b2e401b94fa3b207e6ba"),
-            // ("server_f", "0206b68914af66d8b4b79564da5ad7f155c6fb71ce25b33ec7698b9c7a21148126"),
-            // ("server_g", "02482087f7812bd39bad4a21055569a24590bb6fd77ba319e9131b88548d567e66"),
-            // ("server_h", "024f40c7bbc892d82ff456d30fe8c4ffcbbb26890dc4296a4f4f5ab2912552ca33")
+            ("pbft0pub", "0272baeb5a2f7431e313e21ccc6269d799547bd0271cebc13d19b64d2ab5e3abef"),
+            ("pbft1pub", "03460656d3849bf0c3c7504125e8df7bbc78aac1a6009657be897a02933c5b50ce"),
+            ("pbft2pub", "0319875b98121780ecde58ad721bbb69c2c1b22ddefe8e42baf8e696ec9fff7529"),
+            ("pbft3pub", "021c083e8e58ad4e1a69b3befc5426ca2ac0f2542018d3a8fe9c87ea75c60cc1e3"),
+            ("pbft4pub", "02f88f80bfa7b460ab012b39ae93138799030960b5891a6cacd82b38d1dab4f2b1"),
         ].iter().cloned().collect();
 
         if leader != ""{
@@ -1963,10 +1964,11 @@ impl PoERNode {
 
         info!("{}: Starting change to view {}", state, view);
 
-        let data = PoERNode::read_chain();
-        let leader = PoERNode::choose_leader(data);
+        // let data = PoERNode::read_chain();
+        // let leader = PoERNode::choose_leader(data);
         // info!("===========leader==============={:#?}", leader);
-        state.set_primary_id(leader);
+        // state.set_primary_id(leader);
+        PoERNode::choose_hard_coded_leader(state);
         // info!("===========state leader get==============={:#?}", state.get_primary_id());
 
         state.mode = PbftMode::ViewChanging(view);

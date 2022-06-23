@@ -27,9 +27,21 @@ edition = "2018"
 maintainer = "sawtooth"
 depends = "$auto"
 assets = [
-    ["packaging/systemd/sawtooth-pbft-engine.service", "/lib/systemd/system/sawtooth-pbft-engine.service", "644"],
-    ["packaging/systemd/sawtooth-pbft-engine", "/etc/default/sawtooth-pbft-engine", "644"],
-    ["target/release/pbft-engine", "/usr/bin/pbft-engine", "755"]
+    [
+        "packaging/systemd/sawtooth-pbft-engine.service",
+        "/lib/systemd/system/sawtooth-pbft-engine.service",
+        "644",
+    ],
+    [
+        "packaging/systemd/sawtooth-pbft-engine",
+        "/etc/default/sawtooth-pbft-engine",
+        "644",
+    ],
+    [
+        "target/release/pbft-engine",
+        "/usr/bin/pbft-engine",
+        "755",
+    ],
 ]
 maintainer-scripts = "packaging/ubuntu"
 extended-description = """\
@@ -48,7 +60,7 @@ itertools = "0.7"
 log = "0.4"
 log4rs = "0.8"
 log4rs-syslog = "3.0"
-openssl = "0.10"
+openssl = { version = "0.10", features = ["vendored"] }
 protobuf = { version = "2", features = ["with-serde"] }
 sawtooth-sdk = "0.4"
 serde = "1.0"
