@@ -150,6 +150,14 @@ items:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
 
+            - name: sawtooth-job-tp-python
+              image: job_python:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "job-tp-python -v"
+
   - apiVersion: v1
     kind: Service
     metadata:
@@ -301,6 +309,14 @@ items:
               args:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
+
+            - name: sawtooth-job-tp-python
+              image: job_python:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "job-tp-python -v"
 
   - apiVersion: v1
     kind: Service
@@ -454,6 +470,14 @@ items:
               args:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
+
+            - name: sawtooth-job-tp-python
+              image: job_python:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "job-tp-python -v"
 
   - apiVersion: v1
     kind: Service
@@ -609,6 +633,14 @@ items:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
 
+            - name: sawtooth-job-tp-python
+              image: job_python:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "job-tp-python -v"
+
   - apiVersion: v1
     kind: Service
     metadata:
@@ -763,6 +795,14 @@ items:
               args:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
+
+            - name: sawtooth-job-tp-python
+              image: job_python:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "job-tp-python -v"
 
   - apiVersion: v1
     kind: Service

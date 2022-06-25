@@ -21,18 +21,19 @@ import subprocess
 from setuptools import setup, find_packages
 
 conf_dir = "/etc/sawtooth"
+abs_dir = "/home/job_python"
 
 data_files = [
-    (conf_dir, ['packaging/job.toml.example'])
+    (conf_dir, [f'{abs_dir}/packaging/job.toml.example'])
 ]
 
 if os.path.exists("/etc/default"):
     data_files.append(
-        ('/etc/default', ['packaging/systemd/sawtooth-job-tp-python']))
+        ('/etc/default', [f'{abs_dir}/packaging/systemd/sawtooth-job-tp-python']))
 
 if os.path.exists("/lib/systemd/system"):
     data_files.append(('/lib/systemd/system',
-                       ['packaging/systemd/sawtooth-job-tp-python.service']))
+                       [f'{abs_dir}/packaging/systemd/sawtooth-job-tp-python.service']))
 
 setup(
     name='sawtooth-job',
@@ -50,6 +51,7 @@ setup(
         'PyYAML',
         'cbor',
         'psutil'
+        'requests'
     ],
     data_files=data_files,
     entry_points={
