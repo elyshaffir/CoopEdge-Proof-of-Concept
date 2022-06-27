@@ -5,6 +5,7 @@ import sys
 import os
 import argparse
 import pkg_resources
+import traceback
 
 from sawtooth_sdk.processor.core import TransactionProcessor
 from sawtooth_sdk.processor.log import init_console_logging
@@ -43,34 +44,40 @@ def main(args=None):
     processor = None
     try:
         processor = TransactionProcessor(url=opts.connect)
-        log_config = get_log_config(filename="intkey_log_config.toml")
-
-        # If no toml, try loading yaml
-        if log_config is None:
-            log_config = get_log_config(filename="intkey_log_config.yaml")
-
-        if log_config is not None:
-            log_configuration(log_config=log_config)
-        else:
-            log_dir = get_log_dir()
-            # use the transaction processor zmq identity for filename
-            log_configuration(
-                log_dir=log_dir,
-                name="job-" + str(processor.zmq_id)[2:-1])
-
-        init_console_logging(verbose_level=opts.verbose)
-
-        # The prefix should eventually be looked up from the
-        # validator's namespace registry.
         handler = JobTransactionHandler()
 
         processor.add_handler(handler)
 
         processor.start()
+        if False:
+            log_config = get_log_config(filename="intkey_log_config.toml")
+
+            # If no toml, try loading yaml
+            if log_config is None:
+                log_config = get_log_config(filename="intkey_log_config.yaml")
+
+            if log_config is not None:
+                log_configuration(log_config=log_config)
+            else:
+                log_dir = get_log_dir()
+                # use the transaction processor zmq identity for filename
+                log_configuration(
+                    log_dir=log_dir,
+                    name="job-" + str(processor.zmq_id)[2:-1])
+
+            init_console_logging(verbose_level=opts.verbose)
+
+            # The prefix should eventually be looked up from the
+            # validator's namespace registry.
+            handler = JobTransactionHandler()
+
+            processor.add_handler(handler)
+
+            processor.start()
     except KeyboardInterrupt:
         pass
-    except Exception as e:  # pylint: disable=broad-except
-        print("Error: {}".format(e), file=sys.stderr)
+    except Exception:  # pylint: disable=broad-except
+        print(traceback.format_exc())
     finally:
         if processor is not None:
             processor.stop()

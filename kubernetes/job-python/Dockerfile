@@ -29,8 +29,9 @@ RUN apt-get update \
    &&  apt-get install python3.7-dev -y \
    &&  apt-get install libpython3.7-dev -y \
    &&  apt-get install libffi-dev -y \
-   &&  apt-get install gnupg -y
+   &&  apt-get install gnupg -y \
+   &&  pip3 install aiohttp colorlog protobuf sawtooth-sdk PyYAML cbor psutil requests
 
 COPY job_python /home/job_python
-RUN python3 /home/job_python/setup.py install
 ENV PYTHONPATH="${PYTHONPATH}:/home/job_python"
+WORKDIR /home/job_python/sawtooth_job/processor/

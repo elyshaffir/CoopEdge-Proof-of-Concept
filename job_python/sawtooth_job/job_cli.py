@@ -473,12 +473,12 @@ def main_wrapper():
     try:
         main()
     except JobException as err:
-        print("Error: {}".format(err), file=sys.stderr)
+        print(traceback.format_exc())
         sys.exit(1)
     except KeyboardInterrupt:
         pass
     except SystemExit as err:
         raise err
     except BaseException as err:
-        traceback.print_exc(file=sys.stderr)
+        print(traceback.format_exc())
         sys.exit(1)

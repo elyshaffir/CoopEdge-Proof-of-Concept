@@ -17,6 +17,29 @@ apiVersion: v1
 kind: List
 
 items:
+  # --------------------------=== debug ===--------------------------
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: debug-pod
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          name: debug-pod
+      template:
+        metadata:
+          labels:
+            name: debug-pod
+        spec:
+          containers:
+            - name: sawtooth-job-tp-python
+              image: job_python:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "python3 -c 'import main; main.main()'"
   # --------------------------=== pod 0 ===--------------------------
 
   - apiVersion: apps/v1
@@ -156,7 +179,7 @@ items:
                 - bash
               args:
                 - -c
-                - "job-tp-python -v"
+                - "python3 -c 'import main; main.main()'"
 
   - apiVersion: v1
     kind: Service
@@ -316,7 +339,7 @@ items:
                 - bash
               args:
                 - -c
-                - "job-tp-python -v"
+                - "python3 -c 'import main; main.main()'"
 
   - apiVersion: v1
     kind: Service
@@ -477,7 +500,7 @@ items:
                 - bash
               args:
                 - -c
-                - "job-tp-python -v"
+                - "python3 -c 'import main; main.main()'"
 
   - apiVersion: v1
     kind: Service
@@ -639,7 +662,7 @@ items:
                 - bash
               args:
                 - -c
-                - "job-tp-python -v"
+                - "python3 -c 'import main; main.main()'"
 
   - apiVersion: v1
     kind: Service
@@ -802,7 +825,7 @@ items:
                 - bash
               args:
                 - -c
-                - "job-tp-python -v"
+                - "python3 -c 'import main; main.main()'"
 
   - apiVersion: v1
     kind: Service
