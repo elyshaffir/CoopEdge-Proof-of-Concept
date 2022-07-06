@@ -79,11 +79,18 @@ items:
 
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
+              envFrom:
+                - configMapRef:
+                    name: keys-config
               command:
                 - bash
               args:
                 - -c
-                - "pbft-engine -vv --connect tcp://$HOSTNAME:5050"
+                - |
+                  mkdir -p /root/.sawtooth/keys
+                  echo $pbft0priv > /root/.sawtooth/keys/root.priv
+                  echo $pbft0pub > /root/.sawtooth/keys/root.pub
+                  pbft-engine -vv --connect tcp://$HOSTNAME:5050
 
             - name: sawtooth-rest-api
               image: hyperledger/sawtooth-rest-api:nightly
@@ -94,7 +101,7 @@ items:
                 - bash
               args:
                 - -c
-                - "sawtooth-rest-api -vv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
+                - "sawtooth-rest-api -vvv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
               readinessProbe:
                 httpGet:
                   path: /status
@@ -242,11 +249,26 @@ items:
 
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
+              env:
+                - name: pbft1priv
+                  valueFrom:
+                    configMapKeyRef:
+                      name: keys-config
+                      key: pbft1priv
+                - name: pbft1pub
+                  valueFrom:
+                    configMapKeyRef:
+                      name: keys-config
+                      key: pbft1pub
               command:
                 - bash
               args:
                 - -c
-                - "pbft-engine -vv --connect tcp://$HOSTNAME:5050"
+                - |
+                  mkdir -p /root/.sawtooth/keys
+                  echo $pbft1priv > /root/.sawtooth/keys/root.priv
+                  echo $pbft1pub > /root/.sawtooth/keys/root.pub
+                  pbft-engine -vv --connect tcp://$HOSTNAME:5050
 
             - name: sawtooth-rest-api
               image: hyperledger/sawtooth-rest-api:nightly
@@ -257,7 +279,7 @@ items:
                 - bash
               args:
                 - -c
-                - "sawtooth-rest-api -vv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
+                - "sawtooth-rest-api -vvv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
               readinessProbe:
                 httpGet:
                   path: /status
@@ -394,11 +416,26 @@ items:
 
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
+              env:
+                - name: pbft2priv
+                  valueFrom:
+                    configMapKeyRef:
+                      name: keys-config
+                      key: pbft2priv
+                - name: pbft2pub
+                  valueFrom:
+                    configMapKeyRef:
+                      name: keys-config
+                      key: pbft2pub
               command:
                 - bash
               args:
                 - -c
-                - "pbft-engine -vv --connect tcp://$HOSTNAME:5050"
+                - |
+                  mkdir -p /root/.sawtooth/keys
+                  echo $pbft2priv > /root/.sawtooth/keys/root.priv
+                  echo $pbft2pub > /root/.sawtooth/keys/root.pub
+                  pbft-engine -vv --connect tcp://$HOSTNAME:5050
 
             - name: sawtooth-rest-api
               image: hyperledger/sawtooth-rest-api:nightly
@@ -409,7 +446,7 @@ items:
                 - bash
               args:
                 - -c
-                - "sawtooth-rest-api -vv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
+                - "sawtooth-rest-api -vvv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
               readinessProbe:
                 httpGet:
                   path: /status
@@ -547,11 +584,26 @@ items:
 
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
+              env:
+                - name: pbft3priv
+                  valueFrom:
+                    configMapKeyRef:
+                      name: keys-config
+                      key: pbft3priv
+                - name: pbft3pub
+                  valueFrom:
+                    configMapKeyRef:
+                      name: keys-config
+                      key: pbft3pub
               command:
                 - bash
               args:
                 - -c
-                - "pbft-engine -vv --connect tcp://$HOSTNAME:5050"
+                - |
+                  mkdir -p /root/.sawtooth/keys
+                  echo $pbft3priv > /root/.sawtooth/keys/root.priv
+                  echo $pbft3pub > /root/.sawtooth/keys/root.pub
+                  pbft-engine -vv --connect tcp://$HOSTNAME:5050
 
             - name: sawtooth-rest-api
               image: hyperledger/sawtooth-rest-api:nightly
@@ -562,7 +614,7 @@ items:
                 - bash
               args:
                 - -c
-                - "sawtooth-rest-api -vv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
+                - "sawtooth-rest-api -vvv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
               readinessProbe:
                 httpGet:
                   path: /status
@@ -701,11 +753,26 @@ items:
 
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
+              env:
+                - name: pbft4priv
+                  valueFrom:
+                    configMapKeyRef:
+                      name: keys-config
+                      key: pbft4priv
+                - name: pbft4pub
+                  valueFrom:
+                    configMapKeyRef:
+                      name: keys-config
+                      key: pbft4pub
               command:
                 - bash
               args:
                 - -c
-                - "pbft-engine -vv --connect tcp://$HOSTNAME:5050"
+                - |
+                  mkdir -p /root/.sawtooth/keys
+                  echo $pbft4priv > /root/.sawtooth/keys/root.priv
+                  echo $pbft4pub > /root/.sawtooth/keys/root.pub
+                  pbft-engine -vv --connect tcp://$HOSTNAME:5050
 
             - name: sawtooth-rest-api
               image: hyperledger/sawtooth-rest-api:nightly
@@ -716,7 +783,7 @@ items:
                 - bash
               args:
                 - -c
-                - "sawtooth-rest-api -vv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
+                - "sawtooth-rest-api -vvv -C tcp://$HOSTNAME:4004 -B 0.0.0.0:8008"
               readinessProbe:
                 httpGet:
                   path: /status

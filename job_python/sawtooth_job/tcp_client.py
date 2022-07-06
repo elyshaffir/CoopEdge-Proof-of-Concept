@@ -11,7 +11,7 @@ from sawtooth_job.job_client import JobClient
 class TcpClient:
     def __init__(self,name):
         self.name = name
-        self.host = '136.186.108.248'
+        self.host = 'job-python-echo-server'
         self.port = 6009
         try:
             self.sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)

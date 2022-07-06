@@ -1,4 +1,7 @@
 poer-engine/packaging
 poer-engine/target
+poer-engine/development
+poer-engine/job_python
 job-python/job_python
 job-python/packaging
+job-python/*.tar.gz

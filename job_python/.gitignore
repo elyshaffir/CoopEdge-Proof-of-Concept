@@ -10,3 +10,5 @@ sawtooth_job.egg-info/
 
 build/
 .vscode/settings.json
+
+sawtooth_job/__pycache__

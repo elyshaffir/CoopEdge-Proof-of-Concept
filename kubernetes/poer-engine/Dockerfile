@@ -19,14 +19,29 @@ RUN mkdir -p /run/systemd \
    &&  echo 'docker' > /run/systemd/container
 LABEL install-type=repo
 RUN apt-get update \
-   &&  apt-get install gnupg -y
+   &&  apt-get install software-properties-common -y \
+   &&  add-apt-repository ppa:deadsnakes/ppa -y \
+   &&  apt-get update \
+   &&  apt-get install python3.7 -y \
+   &&  apt-get install python3-pip -y \
+   &&  update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 \
+   &&  update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2 \
+   &&  apt-get install python3.7-dev -y \
+   &&  apt-get install libpython3.7-dev -y \
+   &&  apt-get install libffi-dev -y \
+   &&  apt-get install gnupg -y \
+   &&  pip3 install aiohttp colorlog protobuf sawtooth-sdk PyYAML cbor psutil requests
 RUN echo "deb [arch=amd64] http://repo.sawtooth.me/ubuntu/nightly bionic universe" >> /etc/apt/sources.list \
    &&  (apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 44FC67F19B2466EA || apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 44FC67F19B2466EA) \
    &&  apt-get update \
    &&  apt-get install -y -q sawtooth-pbft-engine \
    &&  apt-get clean \
    &&  rm -rf /var/lib/apt/lists/*
+ENV PYTHONPATH="${PYTHONPATH}:/home/job_python"
+WORKDIR /home/job_python/sawtooth_job/
+COPY development /home/development
+COPY job_python /home/job_python
 COPY packaging/systemd/sawtooth-pbft-engine.service /lib/systemd/system
 COPY packaging/systemd/sawtooth-pbft-engine /etc/default
+COPY reputation.log /home
 COPY target/debug/pbft-engine /usr/bin
-CMD ["pbft-engine" "-C" "tcp://validator:5050"]

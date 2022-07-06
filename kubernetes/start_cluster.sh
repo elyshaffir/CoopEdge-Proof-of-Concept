@@ -3,7 +3,7 @@ echo "Generating keys..."
 kubectl apply -f sawtooth-create-pbft-keys.yaml
 cp pbft-keys-configmap.yaml pbft-keys-configmap_with_keys.yaml
 echo "Waiting until the newly created keys pod starts running..."
-sleep 20
+sleep 8
 kubectl logs $(kubectl get pods | grep pbft-keys | awk -F"[ ',]+" '/pbft-keys-/{print $1}') | sed 's/^/  /' >>pbft-keys-configmap_with_keys.yaml
 echo "Please copy the leader public key (just choose one) from pbft-keys-configmap_with_keys.yaml into sawtooth-poer/src/node.rs:105 and press enter."
 read
@@ -20,17 +20,13 @@ cp ~/prototype/sawtooth-poer/packaging/systemd/sawtooth-pbft-engine.service ~/pr
 cp ~/prototype/sawtooth-poer/packaging/systemd/sawtooth-pbft-engine ~/prototype/kubernetes/poer-engine/packaging/systemd/
 cp ~/prototype/sawtooth-poer/target/debug/pbft-engine ~/prototype/kubernetes/poer-engine/target/debug/
 
+echo "Copying job-python files..."
+cp -R ~/prototype/job_python ~/prototype/kubernetes/job-python/
+cp -R ~/prototype/job_python ~/prototype/kubernetes/poer-engine/
+
 echo "Building the POER engine image..."
 eval $(minikube -p minikube docker-env)
 docker build ~/prototype/kubernetes/poer-engine -t poer_engine:v1
-
-echo "Building job-python..."
-cd ~/prototype/job_python
-python3 setup.py bdist_wheel
-cd -
-
-echo "Copying job-python files..."
-cp -R ~/prototype/job_python ~/prototype/kubernetes/job-python/
 
 echo "Building the job-python image..."
 docker build ~/prototype/kubernetes/job-python -t job_python:v1

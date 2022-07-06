@@ -44,13 +44,14 @@ from sawtooth_job.job_exceptions import JobException
 def _sha512(data):
     return hashlib.sha512(data).hexdigest()
 
+
 # constant
 P = 0.8
 # ten days
 PERIOD = 30*24*60*60*1000
 
+
 class JobClient:
-    
 
     def __init__(self, base_url, keyfile=None):
 
@@ -80,7 +81,8 @@ class JobClient:
     def create(self, workerId, publisherId, start_time, end_time, deadline, base_rewards, wait=None):
         jobId = str(uuid.uuid4())
         if(end_time - start_time) < deadline:
-            extra_rewards = round((P*(deadline - (end_time - start_time)) / deadline)*base_rewards, 1)
+            extra_rewards = round(
+                (P*(deadline - (end_time - start_time)) / deadline)*base_rewards, 1)
         else:
             extra_rewards = 0
             base_rewards = 0.5*base_rewards
@@ -95,7 +97,7 @@ class JobClient:
             str(extra_rewards),
             "create",
             wait=wait,
-            )
+        )
 
     # get job response as input, choose a worker
     def chooseWorker(self, worker1, worker2, worker3, worker4, worker5, worker6, worker7):
@@ -104,37 +106,44 @@ class JobClient:
         # the time workers finish the job
         working_time = {}
         if worker1 is not None:
-            workerId, publisherId, start_time, end_time, deadline = worker1.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker1.split(
+                ',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
         if worker2 is not None:
-            workerId, publisherId, start_time, end_time, deadline = worker2.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker2.split(
+                ',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
         if worker3 is not None:
-            workerId, publisherId, start_time, end_time, deadline = worker3.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker3.split(
+                ',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
         if worker4 is not None:
-            workerId, publisherId, start_time, end_time, deadline = worker4.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker4.split(
+                ',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
-        
+
         if worker5 is not None:
-            workerId, publisherId, start_time, end_time, deadline = worker5.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker5.split(
+                ',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
         if worker6 is not None:
-            workerId, publisherId, start_time, end_time, deadline = worker6.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker6.split(
+                ',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
         if worker7 is not None:
-            workerId, publisherId, start_time, end_time, deadline = worker7.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker7.split(
+                ',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
@@ -157,7 +166,7 @@ class JobClient:
         for w in workers_id:
             if w in delays:
                 worker_delays[w] = delays[w]
-        
+
         # print('++++ worker_delays +++++')
         # print(worker_delays)
 
@@ -186,17 +195,15 @@ class JobClient:
         print('++++ reputation +++++')
         print(repus)
 
-
-        sorted_repu = sorted(repus.items(), key=lambda x: x[1],reverse = True)
+        sorted_repu = sorted(repus.items(), key=lambda x: x[1], reverse=True)
         print('++++ sorted_repu +++++')
         print(sorted_repu[0])
         return sorted_repu[0][0]
         # normalized_working_time = self.normalization(working_time)
         # normalized_delay = self.normalization(worker_delays)
         # normalized_repus = self.normalization(repus)
-     
-        # return self.chooseOne(workers_id, normalized_delay, normalized_repus)
 
+        # return self.chooseOne(workers_id, normalized_delay, normalized_repus)
 
     def chooseOne(self, workers, delay, reputation, working_time):
         delay_weight = 0.3
@@ -205,14 +212,14 @@ class JobClient:
 
         combine = {}
         for workerId in workers:
-            combine[workerId] = reputation_weight*reputation[workerId] 
-            - delay_weight*delay[workerId] - working_time_weight*working_time[workerId]
+            combine[workerId] = reputation_weight*reputation[workerId]
+            - delay_weight*delay[workerId] - \
+                working_time_weight*working_time[workerId]
         print('++++ choose one combine +++++')
         print(combine)
-        s = sorted(combine.items(), key=lambda x: x[1],reverse = True)
+        s = sorted(combine.items(), key=lambda x: x[1], reverse=True)
 
         return s[0]
-
 
     def normalization(self, data):
         sorted_data = sorted(data.items(), key=lambda x: x[1])
@@ -229,8 +236,8 @@ class JobClient:
     def computeReputation(self, workerIds):
         print('++++++++create log file++++++++')
         logger = logging.getLogger()
-        hdlr = logging.FileHandler('/home/ubuntu/reputation.log')
-        logger.addHandler(hdlr) 
+        hdlr = logging.FileHandler('/home/reputation.log')
+        logger.addHandler(hdlr)
         logger.setLevel(logging.INFO)
 
         # get all job from chain
@@ -241,9 +248,9 @@ class JobClient:
         ]
 
         # construct job record for reputation computation
-        # required: start_time 
-        #           end_time 
-        #           extra_rewards 
+        # required: start_time
+        #           end_time
+        #           extra_rewards
         job_record = {}
         jobs = []
         if job_list is not None:
@@ -265,7 +272,7 @@ class JobClient:
 
         # print('++++++++job record in chain++++++++')
         # print(job_record)
-        
+
         # rewards based reputation calculation
         # based on extra rewards, reflecting histroy performance
         reputation_workers = self.computeBasedOnRewards(workerIds, job_record)
@@ -274,7 +281,7 @@ class JobClient:
 
         recvBaseRewards = {}
         recvExtraRewards = {}
-        # initialize 
+        # initialize
         for job in jobs:
             recvBaseRewards[job['workerId']] = 0
             recvExtraRewards[job['workerId']] = 0
@@ -284,13 +291,13 @@ class JobClient:
             recvExtraRewards[job['workerId']] += job['extra_rewards']
 
         for workerId in workerIds:
-            info = workerId + ' - ' +str(recvBaseRewards[workerId]) + ' - ' + str(recvExtraRewards[workerId]) + ' - ' + str(round(reputation_workers[workerId], 3))
+            info = workerId + ' - ' + str(recvBaseRewards[workerId]) + ' - ' + str(
+                recvExtraRewards[workerId]) + ' - ' + str(round(reputation_workers[workerId], 3))
             print('++++++++write log++++++++')
             print(info)
             logger.info(info)
 
         return reputation_workers
-
 
     def computeBasedOnRewards(self, workerIds, job_record):
         B = 0.7
@@ -302,7 +309,8 @@ class JobClient:
         print(job_record)
         # sort by start time
         for workerId, records in job_record.items():
-            job_record[workerId] = sorted(records, key=lambda x: x['start_time'], reverse=True)
+            job_record[workerId] = sorted(
+                records, key=lambda x: x['start_time'], reverse=True)
         print('+++++ sorted print(job_record) ++++')
         print(job_record)
         # extra rewards on each record of receivers on recent X number of jobs
@@ -310,24 +318,23 @@ class JobClient:
         for workerId, records in job_record.items():
             if workerId in workerIds:
                 for record in records:
-                    if i<RECENT_JOB_NUM:
+                    if i < RECENT_JOB_NUM:
                         rewards.setdefault(workerId, []).append({
                             'start_time': float(record['start_time']),
                             'extra_rewards': float(record['extra_rewards'])
                         })
                     i = i+1
-        
+
         print('+++++ sorted print(reward_score) ++++')
         print(rewards)
-        
+
         for workerId, records in rewards.items():
             score = 0
             for record in records:
-                score = B*record['extra_rewards'] + (1-B)*score 
+                score = B*record['extra_rewards'] + (1-B)*score
             reward_score[workerId] = score
 
         return reward_score
-
 
     def getJob(self, jobId, space, wait=None):
         return self._send_transaction(
@@ -340,7 +347,7 @@ class JobClient:
 
         result = self._send_request(
             "state?address={}".format(prefix),
-            )
+        )
 
         try:
             encoded_entries = yaml.safe_load(result)["data"]
@@ -358,7 +365,7 @@ class JobClient:
         result = self._send_request(
             "state/{}".format(address),
             jobId=jobId,
-            )
+        )
         try:
             return base64.b64decode(yaml.safe_load(result)["data"])
 
@@ -369,7 +376,7 @@ class JobClient:
         try:
             result = self._send_request(
                 'batch_statuses?id={}&wait={}'.format(batch_id, wait),
-                )
+            )
             return yaml.safe_load(result)['data'][0]['status']
         except BaseException as err:
             raise JobException(err)
@@ -420,16 +427,18 @@ class JobClient:
         return result.text
 
     def _send_transaction(self,
-                    jobId,
-                    workerId,
-                    publisherId,
-                    start_time,
-                    end_time,
-                    deadline,
-                    base_rewards,
-                    extra_rewards,
-                    action,
-                    wait=None):
+                          jobId,
+                          workerId,
+                          publisherId,
+                          start_time,
+                          end_time,
+                          deadline,
+                          base_rewards,
+                          extra_rewards,
+                          action,
+                          wait=None):
+        if wait is None:
+            wait = 1
         # Serialization is just a delimited utf-8 encoded string
         payload = ",".join([jobId, workerId, publisherId, start_time, end_time,
                             deadline, base_rewards, extra_rewards, action]).encode()
@@ -469,23 +478,27 @@ class JobClient:
             response = self._send_request(
                 "batches", batch_list.SerializeToString(),
                 'application/octet-stream'
-                )
+            )
             while wait_time < wait:
                 status = self._get_status(
                     batch_id,
                     wait - int(wait_time)
-                    )
+                )
                 wait_time = time.time() - begin_time
 
                 if status != 'PENDING':
+                    print(f'Status is not PENDING it is {status}')
                     return response
-
+                else:
+                    print("Status is PENDING")
+                    print(response)
+            print("Returning response")
             return response
 
         return self._send_request(
             "batches", batch_list.SerializeToString(),
             'application/octet-stream',
-            )
+        )
 
     def _create_batch_list(self, transactions):
         transaction_signatures = [t.header_signature for t in transactions]
@@ -500,5 +513,6 @@ class JobClient:
         batch = Batch(
             header=header,
             transactions=transactions,
-            header_signature=signature)
+            header_signature=signature,
+            trace=True)
         return BatchList(batches=[batch])

@@ -34,4 +34,4 @@ RUN apt-get update \
 
 COPY job_python /home/job_python
 ENV PYTHONPATH="${PYTHONPATH}:/home/job_python"
-WORKDIR /home/job_python/sawtooth_job/processor/
+WORKDIR /home/job_python/sawtooth_job/

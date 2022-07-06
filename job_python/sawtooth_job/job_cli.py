@@ -34,7 +34,7 @@ from sawtooth_job.tcp_client import TcpClient
 DISTRIBUTION_NAME = 'sawtooth-job'
 
 
-DEFAULT_URL = 'http://127.0.0.1:8008'
+DEFAULT_URL = 'http://localhost:8008'
 
 
 def create_console_handler(verbose_level):

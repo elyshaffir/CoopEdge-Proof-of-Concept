@@ -6,7 +6,7 @@ class TcpServer:
         self.port = port
         self.srvsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.srvsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.srvsock.bind(('136.186.108.248', port))
+        self.srvsock.bind(('', port))
         self.srvsock.listen(10)
         self.descripors = [self.srvsock]
         print("Server started!")
