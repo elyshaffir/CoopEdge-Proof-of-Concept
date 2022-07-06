@@ -227,10 +227,6 @@ class JobClient:
         return normalized
 
     def computeReputation(self, workerIds):
-        # current time in millisecond
-        # current_time = time.time()
-        current_time = 1593871200000
-
         print('++++++++create log file++++++++')
         logger = logging.getLogger()
         hdlr = logging.FileHandler('/home/ubuntu/reputation.log')

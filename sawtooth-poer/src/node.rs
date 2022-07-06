@@ -102,7 +102,7 @@ impl PoERNode {
     pub fn choose_hard_coded_leader(state: &mut PbftState) -> () {
         // let contents = PoERNode::read_chain();
         warn!("USING HARD CODED LEADER.");
-        let leader = hex::decode("0348686501b0298d37e8a3c99d45a2b9581516169b879988154b8e22e510d01e7c").unwrap(); // PoERNode::choose_leader(contents); // TODO hard coded leader
+        let leader = hex::decode("031d07776c7802a0da49462c25f8e9fb7a7ba5dbc6856bc1851f94bcaecc30d95e").unwrap(); // PoERNode::choose_leader(contents); // TODO hard coded leader
         // info!("=====pbft_state: primary========={:#?}", leader);
         state.set_primary_id(leader);
     }

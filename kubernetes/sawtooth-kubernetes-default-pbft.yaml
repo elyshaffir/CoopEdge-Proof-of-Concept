@@ -17,29 +17,41 @@ apiVersion: v1
 kind: List
 
 items:
-  # --------------------------=== debug ===--------------------------
+  # --------------------------=== job-python server ===--------------------------
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: debug-pod
+      name: job-python-server
     spec:
       replicas: 1
       selector:
         matchLabels:
-          name: debug-pod
+          name: job-python-server
       template:
         metadata:
           labels:
-            name: debug-pod
+            name: job-python-server
         spec:
           containers:
-            - name: sawtooth-job-tp-python
+            - name: job-python-server
               image: job_python:v1
               command:
                 - bash
               args:
                 - -c
-                - "python3 -c 'import main; main.main()'"
+                - "python3 tcp_server.py"
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: job-python-echo-server
+    spec:
+      type: NodePort
+      selector:
+        name: job-python-server
+      ports:
+        - port: 6009
+          targetPort: 6009
+          protocol: TCP
   # --------------------------=== pod 0 ===--------------------------
 
   - apiVersion: apps/v1
@@ -172,14 +184,6 @@ items:
               args:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
-
-            - name: sawtooth-job-tp-python
-              image: job_python:v1
-              command:
-                - bash
-              args:
-                - -c
-                - "python3 -c 'import main; main.main()'"
 
   - apiVersion: v1
     kind: Service
@@ -333,14 +337,6 @@ items:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
 
-            - name: sawtooth-job-tp-python
-              image: job_python:v1
-              command:
-                - bash
-              args:
-                - -c
-                - "python3 -c 'import main; main.main()'"
-
   - apiVersion: v1
     kind: Service
     metadata:
@@ -464,7 +460,7 @@ items:
                   valueFrom:
                     configMapKeyRef:
                       name: keys-config
-                      key: pbft1pub
+                      key: pbft2pub
               command:
                 - bash
               args:
@@ -493,14 +489,6 @@ items:
               args:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
-
-            - name: sawtooth-job-tp-python
-              image: job_python:v1
-              command:
-                - bash
-              args:
-                - -c
-                - "python3 -c 'import main; main.main()'"
 
   - apiVersion: v1
     kind: Service
@@ -656,14 +644,6 @@ items:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
 
-            - name: sawtooth-job-tp-python
-              image: job_python:v1
-              command:
-                - bash
-              args:
-                - -c
-                - "python3 -c 'import main; main.main()'"
-
   - apiVersion: v1
     kind: Service
     metadata:
@@ -818,14 +798,6 @@ items:
               args:
                 - -c
                 - "xo-tp-python -vv -C tcp://$HOSTNAME:4004"
-
-            - name: sawtooth-job-tp-python
-              image: job_python:v1
-              command:
-                - bash
-              args:
-                - -c
-                - "python3 -c 'import main; main.main()'"
 
   - apiVersion: v1
     kind: Service
