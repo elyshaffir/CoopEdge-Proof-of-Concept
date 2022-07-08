@@ -35,6 +35,7 @@ RUN echo "deb [arch=amd64] http://repo.sawtooth.me/ubuntu/nightly bionic univers
    &&  (apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 44FC67F19B2466EA || apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 44FC67F19B2466EA) \
    &&  apt-get update \
    &&  apt-get install -y -q sawtooth-pbft-engine \
+   &&  apt-get install vim curl -y \
    &&  apt-get clean \
    &&  rm -rf /var/lib/apt/lists/*
 ENV PYTHONPATH="${PYTHONPATH}:/home/job_python"

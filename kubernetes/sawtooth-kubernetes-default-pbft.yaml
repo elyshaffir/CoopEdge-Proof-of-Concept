@@ -34,12 +34,7 @@ items:
         spec:
           containers:
             - name: job-python-server
-              image: job_python:v1
-              command:
-                - bash
-              args:
-                - -c
-                - "python3 tcp_server.py"
+              image: job_python_server:v1
   - apiVersion: v1
     kind: Service
     metadata:
@@ -76,7 +71,8 @@ items:
               args:
                 - -c
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
-
+            - name: sawtooth-job-tp-python
+              image: job_python_client:v1
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               envFrom:
@@ -246,7 +242,8 @@ items:
               args:
                 - -c
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
-
+            - name: sawtooth-job-tp-python
+              image: job_python_client:v1
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               env:
@@ -413,7 +410,8 @@ items:
               args:
                 - -c
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
-
+            - name: sawtooth-job-tp-python
+              image: job_python_client:v1
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               env:
@@ -581,7 +579,8 @@ items:
               args:
                 - -c
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
-
+            - name: sawtooth-job-tp-python
+              image: job_python_client:v1
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               env:
@@ -750,7 +749,8 @@ items:
               args:
                 - -c
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
-
+            - name: sawtooth-job-tp-python
+              image: job_python_client:v1
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               env:

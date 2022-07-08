@@ -36,7 +36,7 @@ class JobTransactionHandler(TransactionHandler):
     # transaction holds the command that is to be executed
     # context stores info about current state
     def apply(self, transaction, context):
-
+        print('Apply was called')
         header = transaction.header
         signer = header.signer_public_key
 
@@ -44,29 +44,31 @@ class JobTransactionHandler(TransactionHandler):
 
         job_state = JobState(context)
 
-        # create a transaction 
+        # create a transaction
         if job_payload.action == 'create':
             print('+++++++++++++++++creating job +++++++++++++++++++++++')
             job = Job(jobId=job_payload.jobId,
-                        workerId=job_payload.workerId,
-                        publisherId=job_payload.publisherId,
-                        start_time=job_payload.start_time,
-                        end_time=job_payload.end_time,
-                        deadline=job_payload.deadline,
-                        base_rewards=job_payload.base_rewards,
-                        extra_rewards=job_payload.extra_rewards)
+                      workerId=job_payload.workerId,
+                      publisherId=job_payload.publisherId,
+                      start_time=job_payload.start_time,
+                      end_time=job_payload.end_time,
+                      deadline=job_payload.deadline,
+                      base_rewards=job_payload.base_rewards,
+                      extra_rewards=job_payload.extra_rewards)
             print('+++++++++++++++++hanlder: job +++++++++++++++++++')
             print('job id: ' + job_payload.jobId)
             job_state.set_job(job_payload.jobId, job)
-            _display("{} created a job: {}.".format(signer[:6], job_payload.jobId))
+            _display("{} created a job: {}.".format(
+                signer[:6], job_payload.jobId))
 
-        # retrive job by id. 
+        # retrive job by id.
         elif job_payload.action == 'get':
             job = job_state.get_job(job_payload.jobId)
 
             if job is None:
                 raise InvalidTransaction(
                     'Invalid action: Take requires an existing job')
+
 
 def _display(msg):
     n = msg.count("\n")
