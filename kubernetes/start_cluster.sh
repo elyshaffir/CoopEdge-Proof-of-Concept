@@ -20,22 +20,12 @@ cp ~/prototype/sawtooth-poer/packaging/systemd/sawtooth-pbft-engine.service ~/pr
 cp ~/prototype/sawtooth-poer/packaging/systemd/sawtooth-pbft-engine ~/prototype/kubernetes/poer-engine/packaging/systemd/
 cp ~/prototype/sawtooth-poer/target/debug/pbft-engine ~/prototype/kubernetes/poer-engine/target/debug/
 
-echo "Copying job-python files..."
-cp -R ~/prototype/job_python ~/prototype/kubernetes/job-python/
-cp -R ~/prototype/job_python ~/prototype/kubernetes/poer-engine/
-
 echo "Building the POER engine image..."
 eval $(minikube -p minikube docker-env)
 docker build ~/prototype/kubernetes/poer-engine -t poer_engine:v1
 
-echo "Building the job-python image..."
-docker build ~/prototype/kubernetes/job-python -t job_python:v1
-
-echo "Building the client image..."
-docker build ~/prototype/kubernetes/client_docker -t job_python_client:v1
-
-echo "Building the server image..."
-docker build ~/prototype/kubernetes/server_docker -t job_python_server:v1
+echo "Building the coop_edge image..."
+docker build ~/prototype/coop_edge -t coop_edge:v1
 
 echo "Starting the cluster..."
 kubectl apply -f sawtooth-kubernetes-default-pbft.yaml
