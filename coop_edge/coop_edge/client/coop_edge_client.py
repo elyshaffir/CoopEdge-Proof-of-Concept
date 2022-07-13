@@ -76,7 +76,3 @@ def main():
     transaction = generate_transaction(signer)
     batch = generate_batch(signer, transaction)
     send_batch_list(BatchList(batches=[batch]).SerializeToString())
-
-
-if __name__ == '__main__':
-    main()

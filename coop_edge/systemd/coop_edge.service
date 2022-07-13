@@ -1,0 +1,13 @@
+[Unit]
+Description=Sawtooth Coop Edge TP
+After=network.target
+
+[Service]
+User=sawtooth
+Group=sawtooth
+EnvironmentFile=-/etc/default/coop-edge
+ExecStart=/usr/bin/coop-edge-tp $SAWTOOTH_COOP_EDGE_TP_ARGS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

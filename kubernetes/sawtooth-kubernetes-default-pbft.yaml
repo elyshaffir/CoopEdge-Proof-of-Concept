@@ -42,6 +42,11 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-coop-edge
               image: coop_edge:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "coop-edge-tp -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               envFrom:
@@ -213,6 +218,11 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-coop-edge
               image: coop_edge:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "coop-edge-tp -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               env:
@@ -381,6 +391,11 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-coop-edge
               image: coop_edge:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "coop-edge-tp -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               env:
@@ -550,6 +565,11 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-coop-edge
               image: coop_edge:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "coop-edge-tp -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               env:
@@ -720,6 +740,11 @@ items:
                 - "intkey-tp-python -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-coop-edge
               image: coop_edge:v1
+              command:
+                - bash
+              args:
+                - -c
+                - "coop-edge-tp -vv -C tcp://$HOSTNAME:4004"
             - name: sawtooth-pbft-engine
               image: poer_engine:v1
               env:

@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM jrei/systemd-ubuntu
 
 RUN apt update \
     && apt install gnupg -y
@@ -15,11 +15,11 @@ RUN apt install -y -q \
     vim \
     curl \
     python3-grpcio \
-    python3-grpcio-tools \
+    # python3-grpcio-tools \
     python3-protobuf \
     python3-cbor \
     python3-colorlog \
-    python3-secp256k1 \
+    # python3-secp256k1 \
     python3-toml \
     python3-yaml \
     python3-zmq \
@@ -27,8 +27,11 @@ RUN apt install -y -q \
 
 RUN python3 -m pip install sawtooth-sdk cbor colorlog
 
-COPY coop_edge /home/coop_edge
+RUN mkdir -p /var/log/sawtooth
 
-WORKDIR /home
+COPY . /home/coop_edge
+WORKDIR /home/coop_edge
 
-CMD python3 -u -m coop_edge.processor.transaction_processor
+CMD echo "\033[0;32m--- Building coop-edge-tp ---\n\033[0m" \
+    && python3 setup.py clean --all \
+    && python3 setup.py build
