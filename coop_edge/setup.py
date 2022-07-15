@@ -1,19 +1,18 @@
 import os
-import subprocess
 
 from setuptools import setup, find_packages
 
+abs_dir = "/home/coop_edge"
 
 data_files = []
 
 if os.path.exists("/etc/default"):
     data_files.append(
-        ('/etc/default', ['systemd/coop-edge']))
+        ('/etc/default', [f'{abs_dir}/systemd/coop_edge']))
 
 if os.path.exists("/lib/systemd/system"):
-    data_files.append(
-        ('/lib/systemd/system',
-         ['systemd/coop-edge.service']))
+    data_files.append(('/lib/systemd/system',
+                       [f'{abs_dir}/systemd/coop_edge.service']))
 
 setup(
     name='sawtooth-coop-edge',

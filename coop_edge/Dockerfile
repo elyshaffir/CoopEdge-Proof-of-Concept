@@ -32,6 +32,6 @@ RUN mkdir -p /var/log/sawtooth
 COPY . /home/coop_edge
 WORKDIR /home/coop_edge
 
-CMD echo "\033[0;32m--- Building coop-edge-tp ---\n\033[0m" \
-    && python3 setup.py clean --all \
-    && python3 setup.py build
+EXPOSE 4004/tcp
+# TODO is the above line necessary?
+RUN python3 setup.py install
