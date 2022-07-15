@@ -109,19 +109,19 @@ impl PoERNode {
 
     pub fn choose_leader(state: &mut PbftState) -> Vec<u8>{
         let name_to_key: BTreeMap<&str, &str> = [
-            ("pbft0pub", "03d8a66442fadd32300dbe80043dddd339731764bfe9bc5bc67c218cb1a1a524e6"),
-            ("pbft1pub", "02943f9596cc071bdb8c98f27108fd028a834299684a000572625afb131ae64f81"),
-            ("pbft2pub", "02125ecbe32b73b46e2bf60c1668a4dd9a45c9383569ea8574a4a1686ef17d89d4"),
-            ("pbft3pub", "02675c44a4b70c405ed46db1216d6f9b82234ec04389137bdb9e702fe9c3c18be9"),
-            ("pbft4pub", "02fa4a844bbfb6fa6a21aef0f7627565283d6b14a5ac332b0d5325a41b8d6f6609"),
+            ("pbft0pub", "NODE_0_PUB_KEY"),
+            ("pbft1pub", "NODE_1_PUB_KEY"),
+            ("pbft2pub", "NODE_2_PUB_KEY"),
+            ("pbft3pub", "NODE_3_PUB_KEY"),
+            ("pbft4pub", "NODE_4_PUB_KEY"),
         ].iter().cloned().collect();
 
         let key_to_name: BTreeMap<&str, &str> = [
-            ("03d8a66442fadd32300dbe80043dddd339731764bfe9bc5bc67c218cb1a1a524e6", "pbft0pub"),
-            ("02943f9596cc071bdb8c98f27108fd028a834299684a000572625afb131ae64f81", "pbft1pub"),
-            ("02125ecbe32b73b46e2bf60c1668a4dd9a45c9383569ea8574a4a1686ef17d89d4", "pbft2pub"),
-            ("02675c44a4b70c405ed46db1216d6f9b82234ec04389137bdb9e702fe9c3c18be9", "pbft3pub"),
-            ("02fa4a844bbfb6fa6a21aef0f7627565283d6b14a5ac332b0d5325a41b8d6f6609", "pbft4pub"),
+            ("NODE_0_PUB_KEY", "pbft0pub"),
+            ("NODE_1_PUB_KEY", "pbft1pub"),
+            ("NODE_2_PUB_KEY", "pbft2pub"),
+            ("NODE_3_PUB_KEY", "pbft3pub"),
+            ("NODE_4_PUB_KEY", "pbft4pub"),
         ].iter().cloned().collect();
         
         let names_vector = vec!["pbft0pub", "pbft1pub", "pbft2pub", "pbft3pub", "pbft4pub"];

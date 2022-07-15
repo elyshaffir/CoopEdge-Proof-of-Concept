@@ -2,10 +2,16 @@
 echo "Generating keys..."
 kubectl apply -f sawtooth-create-pbft-keys.yaml
 cp pbft-keys-configmap.yaml pbft-keys-configmap_with_keys.yaml
-sleep 15
+kubectl wait --for=condition=complete job.batch/pbft-keys
 kubectl logs $(kubectl get pods | grep pbft-keys | awk -F"[ ',]+" '/pbft-keys-/{print $1}') | sed 's/^/  /' >>pbft-keys-configmap_with_keys.yaml
-echo "Please copy the leader public key (just choose one) from pbft-keys-configmap_with_keys.yaml into sawtooth-poer/src/node.rs:105 and press enter."
-read
+cp ~/prototype/sawtooth-poer/src/node.rs_template ~/prototype/sawtooth-poer/src/node.rs
+i=0
+echo "Hard coding the following keys:"
+for key in $(cat pbft-keys-configmap_with_keys.yaml | awk -F"[ ',]+" '/pub/{print $3}'); do
+    echo $i $key
+    sed -i "s/NODE_${i}_PUB_KEY/${key}/g" ~/prototype/sawtooth-poer/src/node.rs
+    ((i++))
+done
 kubectl apply -f pbft-keys-configmap_with_keys.yaml
 kubectl delete jobs pbft-keys
 

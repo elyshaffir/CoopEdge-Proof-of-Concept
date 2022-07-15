@@ -86,6 +86,8 @@ pub struct PbftState {
     /// This node's ID
     pub id: PeerId,
 
+    pub leader_name: String,
+
     /// primary node's ID
     pub leader_id: PeerId,
 
@@ -153,6 +155,7 @@ impl PbftState {
 
         PbftState {
             id,
+            leader_name: "pbft3pub".to_string(),
             leader_id: PeerId::new(),
             seq_num: head_block_num + 1,
             view: 0,
