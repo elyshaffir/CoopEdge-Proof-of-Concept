@@ -127,7 +127,7 @@ items:
                       sawtooth.consensus.algorithm.version=1.0\
                       sawtooth.consensus.pbft.members=["\"$pbft0pub\",\"$pbft1pub\",\"$pbft2pub\",\"$pbft3pub\",\"$pbft4pub\""] \
                       sawtooth.publisher.max_batches_per_block=1200 \
-                      sawtooth.consensus.pbft.forced_view_change_interval=1000 \
+                      sawtooth.consensus.pbft.forced_view_change_interval=2000 \
                       -o config.batch
                   fi && \
                   if [ ! -e /var/lib/sawtooth/genesis.batch ]; then

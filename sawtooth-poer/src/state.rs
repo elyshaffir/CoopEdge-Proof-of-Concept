@@ -155,7 +155,7 @@ impl PbftState {
 
         PbftState {
             id,
-            leader_name: "pbft3pub".to_string(),
+            leader_name: "".to_string(),
             leader_id: PeerId::new(),
             seq_num: head_block_num + 1,
             view: 0,

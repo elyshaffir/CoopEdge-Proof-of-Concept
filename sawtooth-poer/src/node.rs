@@ -100,34 +100,57 @@ impl PoERNode {
     }
 
     pub fn choose_hard_coded_leader(state: &mut PbftState) -> () {
-        warn!("TRYING TO MAKE THE OLD CODE WORK");
-        info!("===========old leader name is==============={}", state.leader_name);
+        if state.leader_name != "" {
+            info!("===========old leader name is: {}===============", state.leader_name);
+        }
         let new_leader = PoERNode::choose_leader(state);
-        info!("===========new leader name is==============={}", state.leader_name);
+        info!("===========new leader name is: {}===============", state.leader_name);
         state.set_primary_id(new_leader);
     }
 
     pub fn choose_leader(state: &mut PbftState) -> Vec<u8>{
+
+        let name_to_reputation: BTreeMap<&str, i32> = [
+            ("pbft0pub", 100),
+            ("pbft1pub", 120),
+            ("pbft2pub", 30),
+            ("pbft3pub", 90),
+            ("pbft4pub", 95),
+        ].iter().cloned().collect();
+
         let name_to_key: BTreeMap<&str, &str> = [
-            ("pbft0pub", "03d8a66442fadd32300dbe80043dddd339731764bfe9bc5bc67c218cb1a1a524e6"),
-            ("pbft1pub", "02943f9596cc071bdb8c98f27108fd028a834299684a000572625afb131ae64f81"),
-            ("pbft2pub", "02125ecbe32b73b46e2bf60c1668a4dd9a45c9383569ea8574a4a1686ef17d89d4"),
-            ("pbft3pub", "02675c44a4b70c405ed46db1216d6f9b82234ec04389137bdb9e702fe9c3c18be9"),
-            ("pbft4pub", "02fa4a844bbfb6fa6a21aef0f7627565283d6b14a5ac332b0d5325a41b8d6f6609"),
+            ("pbft0pub", "039b5f9be9801afba6ea6ecabbe771a046fe704cf624669a5e1c3584438ce67c14"),
+            ("pbft1pub", "02cce9feb95687e24b34623479b69f4fdd31e54290d2ed23903a445570be85cd8f"),
+            ("pbft2pub", "03cbba554ceb6136162e9f3dd15996c585606388f1099d6d032ccc73a699b196d1"),
+            ("pbft3pub", "02bdb15e4e2a806f033f2d7826172a108e8fd98f8155ae99650053a431bd842fb2"),
+            ("pbft4pub", "022befe2d84c6502e9298b55c55365ebbaf2f0bc6a3850b885f5c0d342dfa42639"),
         ].iter().cloned().collect();
 
         let key_to_name: BTreeMap<&str, &str> = [
-            ("03d8a66442fadd32300dbe80043dddd339731764bfe9bc5bc67c218cb1a1a524e6", "pbft0pub"),
-            ("02943f9596cc071bdb8c98f27108fd028a834299684a000572625afb131ae64f81", "pbft1pub"),
-            ("02125ecbe32b73b46e2bf60c1668a4dd9a45c9383569ea8574a4a1686ef17d89d4", "pbft2pub"),
-            ("02675c44a4b70c405ed46db1216d6f9b82234ec04389137bdb9e702fe9c3c18be9", "pbft3pub"),
-            ("02fa4a844bbfb6fa6a21aef0f7627565283d6b14a5ac332b0d5325a41b8d6f6609", "pbft4pub"),
+            ("039b5f9be9801afba6ea6ecabbe771a046fe704cf624669a5e1c3584438ce67c14", "pbft0pub"),
+            ("02cce9feb95687e24b34623479b69f4fdd31e54290d2ed23903a445570be85cd8f", "pbft1pub"),
+            ("03cbba554ceb6136162e9f3dd15996c585606388f1099d6d032ccc73a699b196d1", "pbft2pub"),
+            ("02bdb15e4e2a806f033f2d7826172a108e8fd98f8155ae99650053a431bd842fb2", "pbft3pub"),
+            ("022befe2d84c6502e9298b55c55365ebbaf2f0bc6a3850b885f5c0d342dfa42639", "pbft4pub"),
         ].iter().cloned().collect();
         
-        let names_vector = vec!["pbft0pub", "pbft1pub", "pbft2pub", "pbft3pub", "pbft4pub"];
-        let new_leader_name_index = (names_vector.iter().position(|&name| name == &state.leader_name).unwrap() + 1) % names_vector.len();
-        let new_leader_name = names_vector[new_leader_name_index];
+        let new_leader_name = {
+            if state.leader_name == "" {
+                info!("===========The reputation for each node is:===============\n{:?}", name_to_reputation);
+                let leader_name = name_to_reputation.iter().max_by_key( |p| p.1 ).unwrap().0;
+                info!("===========The first leader node is: {}===============", leader_name);
+                leader_name
+            } else {
+                let names_vector = vec!["pbft0pub", "pbft1pub", "pbft2pub", "pbft3pub", "pbft4pub"];
+                let new_leader_name_index = (names_vector.iter().position(|&name| name == &state.leader_name).unwrap() + 1) % names_vector.len();
+                names_vector[new_leader_name_index]
+            }
+        };
         state.leader_name = new_leader_name.to_string();
+        if name_to_reputation[&new_leader_name] < 50 {
+            info!("===========The new leader was supposed to be {} but it has too low of a reputation===============", new_leader_name);
+            return PoERNode::choose_leader(state)
+        }
         let new_leader_key = name_to_key[&new_leader_name];
         let leader_bytes = hex::decode(new_leader_key).unwrap();
     

@@ -4,7 +4,7 @@ kubectl apply -f sawtooth-create-pbft-keys.yaml
 cp pbft-keys-configmap.yaml pbft-keys-configmap_with_keys.yaml
 kubectl wait --for=condition=complete job.batch/pbft-keys
 kubectl logs $(kubectl get pods | grep pbft-keys | awk -F"[ ',]+" '/pbft-keys-/{print $1}') | sed 's/^/  /' >>pbft-keys-configmap_with_keys.yaml
-cp ~/prototype/sawtooth-poer/src/node.rs_template ~/prototype/sawtooth-poer/src/node.rs
+cp ~/prototype/sawtooth-poer/src/node_template.rs ~/prototype/sawtooth-poer/src/node.rs
 i=0
 echo "Hard coding the following keys:"
 for key in $(cat pbft-keys-configmap_with_keys.yaml | awk -F"[ ',]+" '/pub/{print $3}'); do

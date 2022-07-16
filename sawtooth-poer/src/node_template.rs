@@ -100,14 +100,24 @@ impl PoERNode {
     }
 
     pub fn choose_hard_coded_leader(state: &mut PbftState) -> () {
-        warn!("TRYING TO MAKE THE OLD CODE WORK");
-        info!("===========old leader name is==============={}", state.leader_name);
+        if state.leader_name != "" {
+            info!("===========old leader name is: {}===============", state.leader_name);
+        }
         let new_leader = PoERNode::choose_leader(state);
-        info!("===========new leader name is==============={}", state.leader_name);
+        info!("===========new leader name is: {}===============", state.leader_name);
         state.set_primary_id(new_leader);
     }
 
     pub fn choose_leader(state: &mut PbftState) -> Vec<u8>{
+
+        let name_to_reputation: BTreeMap<&str, i32> = [
+            ("pbft0pub", 100),
+            ("pbft1pub", 120),
+            ("pbft2pub", 30),
+            ("pbft3pub", 90),
+            ("pbft4pub", 95),
+        ].iter().cloned().collect();
+
         let name_to_key: BTreeMap<&str, &str> = [
             ("pbft0pub", "NODE_0_PUB_KEY"),
             ("pbft1pub", "NODE_1_PUB_KEY"),
@@ -124,10 +134,23 @@ impl PoERNode {
             ("NODE_4_PUB_KEY", "pbft4pub"),
         ].iter().cloned().collect();
         
-        let names_vector = vec!["pbft0pub", "pbft1pub", "pbft2pub", "pbft3pub", "pbft4pub"];
-        let new_leader_name_index = (names_vector.iter().position(|&name| name == &state.leader_name).unwrap() + 1) % names_vector.len();
-        let new_leader_name = names_vector[new_leader_name_index];
+        let new_leader_name = {
+            if state.leader_name == "" {
+                info!("===========The reputation for each node is:===============\n{:?}", name_to_reputation);
+                let leader_name = name_to_reputation.iter().max_by_key( |p| p.1 ).unwrap().0;
+                info!("===========The first leader node is: {}===============", leader_name);
+                leader_name
+            } else {
+                let names_vector = vec!["pbft0pub", "pbft1pub", "pbft2pub", "pbft3pub", "pbft4pub"];
+                let new_leader_name_index = (names_vector.iter().position(|&name| name == &state.leader_name).unwrap() + 1) % names_vector.len();
+                names_vector[new_leader_name_index]
+            }
+        };
         state.leader_name = new_leader_name.to_string();
+        if name_to_reputation[&new_leader_name] < 50 {
+            info!("===========The new leader was supposed to be {} but it has too low of a reputation===============", new_leader_name);
+            return PoERNode::choose_leader(state)
+        }
         let new_leader_key = name_to_key[&new_leader_name];
         let leader_bytes = hex::decode(new_leader_key).unwrap();
     
